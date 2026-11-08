@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6f1e9" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23dce7d7'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-size='46' fill='%23788f73'%3E✿%3C/text%3E%3C/svg%3E" />
+  <title>Casa de Primavera — um dia no seu ritmo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Casa de Primavera">
+        <span class="brand-mark">✿</span><span><b>casa de primavera</b><small>um dia no seu ritmo</small></span>
+      </a>
+      <div class="date-pill"><span class="sun-icon">☀</span><span><b id="dayLabel">SEGUNDA-FEIRA</b><small id="timeLabel">09:20 · manhã tranquila</small></span></div>
+      <div class="top-actions">
+        <button class="icon-btn" id="soundBtn" aria-label="Som">♫</button>
+        <button class="icon-btn" id="saveBtn" aria-label="Salvar progresso">▣</button>
+        <button class="profile" id="profileBtn"><span class="avatar-mini">L</span><span>Meu perfil</span><span class="chevron">⌄</span></button>
+      </div>
+    </header>
+
+    <section class="game-layout">
+      <aside class="left-rail">
+        <div class="rail-heading"><div><span class="eyebrow">SEU LAR</span><h1>Um lugar<br>para florescer.</h1></div><span class="weather">☀️<small>22°</small></span></div>
+        <div class="home-card"><div class="home-card-art"><span class="little-house">⌂</span><span>⌁ ✿ ⌁</span></div><div class="home-meta"><span>Residência</span><b>Casinha das Flores</b><small>Jardim · 4 cômodos</small></div><button class="dots" aria-label="Opções">···</button></div>
+        <div class="section-title"><span>ROTINA DE HOJE</span><button id="resetDay" title="Reiniciar tarefas">↻</button></div>
+        <div class="routine-list" id="routineList">
+          <button class="routine-item active" data-room="living"><span class="task-icon mint">☕</span><span><b>Um começo leve</b><small>Prepare um café da manhã</small></span><i>›</i></button>
+          <button class="routine-item" data-room="kitchen"><span class="task-icon peach">⌂</span><span><b>Cozinha em ordem</b><small>Lave a louça da noite</small></span><i>›</i></button>
+          <button class="routine-item" data-room="garden"><span class="task-icon lilac">❀</span><span><b>Pequenos cuidados</b><small>Regue as plantas do jardim</small></span><i>›</i></button>
+        </div>
+        <div class="mood-card"><div class="mood-top"><span>SEU BEM-ESTAR</span><span id="moodText">radiante ✦</span></div><div class="mood-bars"><div><span>Energia</span><div class="bar"><i id="energyBar" style="width:84%"></i></div></div><div><span>Conforto</span><div class="bar pink"><i id="comfortBar" style="width:72%"></i></div></div></div><p>Sem pressa. A casa e você têm o dia todo. <span>♡</span></p></div>
+        <div class="side-bottom"><span class="tiny-flower">✿</span><span>Feito para viver<br><b>do seu jeitinho.</b></span><button id="helpBtn">?</button></div>
+      </aside>
+
+      <section class="world" id="world" aria-label="Casa de Primavera, ambiente interativo">
+        <div class="scene-top"><div class="room-label"><span class="live-dot"></span><span id="roomName">SALA DE ESTAR</span><small>CASINHA DAS FLORES</small></div><div class="scene-tools"><button id="cameraBtn"><span>◉</span> <span id="cameraLabel">3ª pessoa</span></button><button id="editBtn">✎ <span>Decorar</span></button></div></div>
+        <div class="sunbeam beam-one"></div><div class="sunbeam beam-two"></div>
+        <div class="room-scene" id="roomScene">
+          <div class="back-wall"></div><div class="side-wall"></div><div class="floor"></div>
+          <div class="window"><div class="window-view"><div class="cloud cloud-one"></div><div class="cloud cloud-two"></div><div class="hill"></div><div class="window-tree">♧</div></div><i class="window-v"></i><i class="window-h"></i><div class="curtain curtain-left"></div><div class="curtain curtain-right"></div></div>
+          <div class="shelf"><span>♡</span><span>▱</span><span>✿</span><div class="shelf-plant">♧</div></div>
+          <div class="art-frame"><span>take it<br>slow <i>☼</i></span></div>
+          <div class="lamp"><i></i><b></b><span></span></div>
+          <div class="plant plant-left"><i class="leaf l1"></i><i class="leaf l2"></i><i class="leaf l3"></i><i class="leaf l4"></i><i class="leaf l5"></i><b></b></div>
+          <div class="plant plant-right"><i class="leaf l1"></i><i class="leaf l2"></i><i class="leaf l3"></i><i class="leaf l4"></i><i class="leaf l5"></i><b></b></div>
+          <div class="console"><div class="console-top"><span>◌</span><span>▰</span></div><div class="console-leg"></div></div>
+          <div class="sofa"><div class="sofa-back"></div><div class="sofa-arm left"></div><div class="sofa-arm right"></div><div class="sofa-seat"></div><div class="pillow pillow-one"></div><div class="pillow pillow-two"></div><div class="sofa-foot f1"></div><div class="sofa-foot f2"></div></div>
+          <div class="coffee-table"><div class="table-top"><span class="book"></span><span class="mug">☕</span><span class="vase">✿</span></div><div class="table-leg l"></div><div class="table-leg r"></div></div>
+          <div class="rug"></div>
+          <div class="pet" id="pet"><div class="pet-tail"></div><div class="pet-body"></div><div class="pet-head"><i class="ear e1"></i><i class="ear e2"></i><i class="eye eye1"></i><i class="eye eye2"></i><i class="snout"></i></div><div class="pet-leg p1"></div><div class="pet-leg p2"></div><div class="pet-tag">♡</div></div>
+          <div class="character" id="character"><div class="char-shadow"></div><div class="char-hair"></div><div class="char-head"><i class="char-eye e1"></i><i class="char-eye e2"></i><i class="char-nose"></i></div><div class="char-neck"></div><div class="char-body"><div class="shirt-collar"></div><i class="arm arm-left"></i><i class="arm arm-right"></i></div><div class="char-legs"><i></i><i></i></div></div>
+          <div class="toast-bubble" id="actionBubble">Que manhã gostosa ☀</div>
+          <div class="interaction-hint" id="interactionHint"><span>✧</span> Toque em um objeto para interagir</div>
+          <button class="object-hit hit-sofa" data-object="Sofá" aria-label="Interagir com sofá"></button><button class="object-hit hit-plant" data-object="Planta" aria-label="Interagir com planta"></button><button class="object-hit hit-table" data-object="Mesinha" aria-label="Interagir com mesinha"></button><button class="object-hit hit-pet" data-object="Mel" aria-label="Interagir com Mel"></button>
+        </div>
+        <div class="room-switcher"><button class="room-tab selected" data-room="living"><span>⌂</span>Sala</button><button class="room-tab" data-room="kitchen"><span>♨</span>Cozinha</button><button class="room-tab" data-room="bedroom"><span>☾</span>Quarto</button><button class="room-tab" data-room="bathroom"><span>♧</span>Banheiro</button><button class="room-tab" data-room="garden"><span>❀</span>Jardim</button></div>
+        <div class="joystick" id="joystick" aria-label="Controle de movimento"><span class="joy-ring"></span><span class="joy-knob" id="joyKnob"></span><small>MOVER</small></div>
+        <button class="interact-button" id="interactBtn"><span>✧</span><b>Interagir</b></button>
+        <div class="move-tip" id="moveTip">DESLIZE PARA OLHAR <span>↗</span></div>
+      </section>
+
+      <aside class="right-panel">
+        <div class="right-head"><div><span class="eyebrow">SEU DIA, SEU RITMO</span><h2>O que vamos<br>fazer agora?</h2></div><button class="more-btn" id="moreBtn">···</button></div>
+        <div class="suggestion"><div class="suggestion-photo"><span class="coffee-doodle">☕</span><span class="photo-label">UM RITUAL SEU</span><i class="steam s1"></i><i class="steam s2"></i></div><div class="suggestion-body"><div class="suggestion-kicker">BOM DIA, LIA <span>✦</span></div><h3>Comece devagar.</h3><p>Um café quentinho, a luz entrando pela janela e a Mel por perto.</p><button class="primary-btn" data-action="Fazer café da manhã">Preparar café da manhã <span>→</span></button></div></div>
+        <div class="quick-title"><span>PEQUENOS MOMENTOS</span><span>♡</span></div>
+        <div class="quick-actions"><button data-action="Fazer carinho na Mel"><span class="quick-icon peach">♡</span><span><b>Carinho na Mel</b><small>Ela está pedindo atenção</small></span><i>›</i></button><button data-action="Regar as plantas"><span class="quick-icon green">❀</span><span><b>Regar as plantas</b><small>O jardim agradece</small></span><i>›</i></button><button data-action="Organizar a sala"><span class="quick-icon lilac">⌂</span><span><b>Organizar a sala</b><small>Deixe tudo no lugar</small></span><i>›</i></button></div>
+        <div class="family-card"><div class="family-illustration"><span class="heart-float">♡</span><span class="family-person">☺</span><span class="family-pet">🐕</span></div><div><span class="eyebrow">SUA FAMÍLIA</span><b>Você escolhe o que é família.</b><small>Mel já faz parte da sua.</small></div><button id="familyBtn">›</button></div>
+        <div class="panel-footer"><span>✿</span> Um lar que cresce com você</div>
+      </aside>
+    </section>
+    <div class="mobile-nav"><button class="nav-active">⌂<small>Lar</small></button><button id="mobileRoutine">☼<small>Rotina</small></button><button id="mobileWardrobe">♙<small>Estilo</small></button><button id="mobileShop">＋<small>Loja</small></button><button id="mobileMenu">☰<small>Menu</small></button></div>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+  <div class="modal-backdrop" id="modalBackdrop"><section class="modal" id="modal"><button class="modal-close" id="modalClose">×</button><div id="modalContent"></div></section></div>
+  <script src="game.js"></script>
+</body>
+</html>
