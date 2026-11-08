@@ -33,11 +33,14 @@
 </div>
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
 const sceneHost=document.querySelector('#scene');
 const scene=new THREE.Scene(); scene.background=new THREE.Color(0xc9e7e8); scene.fog=new THREE.Fog(0xc9e7e8,24,45);
-const camera=new THREE.OrthographicCamera(-12,12,8,-8,.1,100); camera.position.set(13,15,19); camera.lookAt(0,1.1,0);
+const camera=new THREE.PerspectiveCamera(42,1,.1,100); camera.position.set(15,17,22); camera.lookAt(0,1,0);
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.16; sceneHost.appendChild(renderer.domElement);
+const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,1,0);controls.enableDamping=true;controls.dampingFactor=.075;controls.enablePan=true;controls.screenSpacePanning=true;controls.minDistance=10;controls.maxDistance=38;controls.minPolarAngle=.22;controls.maxPolarAngle=1.48;controls.touches.ONE=THREE.TOUCH.ROTATE;controls.touches.TWO=THREE.TOUCH.DOLLY_PAN;controls.update();
+renderer.domElement.style.touchAction='none';
 scene.add(new THREE.HemisphereLight(0xfff8eb,0x899e9b,2.1)); const sun=new THREE.DirectionalLight(0xffe6c6,3.0);sun.position.set(-5,12,7);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-13;sun.shadow.camera.right=13;sun.shadow.camera.top=13;sun.shadow.camera.bottom=-13;sun.shadow.bias=-.0002;scene.add(sun);
 const mat=(color,rough=.8)=>new THREE.MeshStandardMaterial({color,roughness:rough});
 const M={cream:mat('#fff2dc'),wall:mat('#fff6e9'),pink:mat('#f3b4a5'),coral:mat('#ef927f'),mint:mat('#9fcfba'),sage:mat('#75a892'),wood:mat('#be8b67'),wood2:mat('#d7aa83'),darkwood:mat('#8d665a'),blue:mat('#9dcbd2'),lilac:mat('#c3aad9'),yellow:mat('#f4ce79'),white:mat('#fffaf1'),skin:mat('#edb894'),hair:mat('#765248'),green:mat('#7ca98c'),red:mat('#ee8b81'),gray:mat('#c3c4bd'),floor:mat('#edd9c4'),rug:mat('#f3c9b8'),shadow:mat('#77655b'),black:mat('#4b464c')};
@@ -190,7 +193,7 @@ let audioOn=false,ctx,osc,gain;document.querySelector('#sound').onclick=()=>{aud
 const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let hoverObj=null;const interactables=[{mesh:plate,id:'cook'},{mesh:toys[0],id:'toys'},{mesh:spill,id:'spill'},{mesh:baby.children[0],id:'feed'}];
 renderer.domElement.addEventListener('pointermove',e=>{pointer.x=e.clientX/innerWidth*2-1;pointer.y=-(e.clientY/innerHeight)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(interactables.map(x=>x.mesh),false);renderer.domElement.style.cursor=hits.length?'pointer':'default'});
 renderer.domElement.addEventListener('click',e=>{pointer.x=e.clientX/innerWidth*2-1;pointer.y=-(e.clientY/innerHeight)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(interactables.map(x=>x.mesh),false);if(hits.length){const target=interactables.find(x=>x.mesh===hits[0].object);if(target)doTask(target.id)}});
-function resize(){const w=sceneHost.clientWidth,h=sceneHost.clientHeight,aspect=w/h;const view=9.4;camera.left=-view*aspect;camera.right=view*aspect;camera.top=view;camera.bottom=-view;camera.updateProjectionMatrix();renderer.setSize(w,h,false)}window.addEventListener('resize',resize);resize();
+function resize(){const w=sceneHost.clientWidth,h=sceneHost.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false)}window.addEventListener('resize',resize);resize();
 const clock=new THREE.Clock();function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();if(avatar.userData.dest){const d=avatar.userData.dest;const dx=d.x-avatar.position.x,dz=d.z-avatar.position.z;const len=Math.hypot(dx,dz);if(len>.08){avatar.position.x+=dx/len*.075;avatar.position.z+=dz/len*.075;avatar.rotation.y=Math.atan2(dx,dz);avatar.position.y=Math.abs(Math.sin(t*12))*.055}else{avatar.userData.dest=null;avatar.position.y=0}}
 baby.position.y=1+Math.sin(t*2.7)*.035+(baby.userData.fed?.02:0);baby.rotation.z=Math.sin(t*1.6)*.025;
 if(!complete){renderer.render(scene,camera)}else renderer.render(scene,camera)}animate();
