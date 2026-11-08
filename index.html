@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Little Home, Big Love</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Nunito:wght@600;700;800;900&display=swap');
+:root{--ink:#493d4b;--muted:#8a7b88;--coral:#f48f83;--peach:#ffcfb3;--cream:#fffaf2;--mint:#b9e6d3;--lilac:#d7c6ee;--yellow:#ffdc81}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#d9edf0;color:var(--ink);font-family:'DM Sans',sans-serif}button{font:inherit;color:inherit;border:0;cursor:pointer}#game{position:relative;width:100%;height:100%;overflow:hidden;background:linear-gradient(180deg,#c8e8ec 0%,#e6f4eb 66%,#f7e9d8 100%)}#scene{position:absolute;inset:0}canvas{display:block;width:100%;height:100%;outline:none}
+.topbar{position:absolute;z-index:3;top:18px;left:22px;right:22px;display:flex;align-items:flex-start;justify-content:space-between;pointer-events:none}.brand,.day-pill,.sound-btn{pointer-events:auto}.brand{display:flex;gap:12px;align-items:center}.brand-icon{width:48px;height:48px;display:grid;place-items:center;background:var(--cream);border-radius:16px;box-shadow:0 6px 20px #65564d20;font-size:25px}.brand-name{font:900 20px Nunito,sans-serif;letter-spacing:-.4px}.brand-sub{font-size:11px;color:#806f7b;margin-top:1px;font-weight:700;letter-spacing:.5px}.topright{display:flex;gap:10px;align-items:center}.day-pill,.sound-btn{padding:10px 15px;border-radius:15px;background:#fffaf2eF;box-shadow:0 5px 18px #65564d1a;font-size:12px;font-weight:800}.day-pill span{color:#e7897e;margin-left:6px}.sound-btn{font-size:16px;width:42px;height:42px;padding:0}
+.panel{position:absolute;z-index:4;background:#fffaf2f2;backdrop-filter:blur(16px);border:1px solid #fff9;border-radius:22px;box-shadow:0 12px 32px #68595020}.left-panel{left:20px;top:88px;width:252px;padding:17px 17px 15px}.eyebrow{font-size:10px;letter-spacing:1.6px;color:#a38b96;font-weight:900;text-transform:uppercase}.panel h1{font:900 22px/1.1 Nunito,sans-serif;margin:5px 0 4px;letter-spacing:-.5px}.intro{font-size:12px;color:#887b82;line-height:1.45;margin:0 0 14px}.need{margin:11px 0}.need-head{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:800;margin-bottom:5px}.need-name{display:flex;gap:6px;align-items:center}.need-val{color:#9e8d92;font-size:10px}.bar{height:7px;border-radius:9px;background:#eee7e2;overflow:hidden}.bar-fill{height:100%;border-radius:9px;transition:width .5s ease,background .5s ease;background:linear-gradient(90deg,#ffb99b,#f48f83)}.bar-fill.mint{background:linear-gradient(90deg,#a8dfc7,#6fbea2)}.bar-fill.lilac{background:linear-gradient(90deg,#cfbde7,#a58bd0)}.need-note{font-size:9px;color:#a5999d;margin-top:4px}.quest{margin-top:15px;padding-top:13px;border-top:1px solid #eee5dd}.quest-title{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:900;letter-spacing:1px;color:#a18d93;text-transform:uppercase}.quest-count{color:#e8877c;letter-spacing:0}.quest-list{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:6px}.quest-list li{font-size:11px;display:flex;align-items:center;gap:8px;color:#756872;transition:.2s}.quest-list li.done{color:#aaa2a2;text-decoration:line-through}.check{width:16px;height:16px;border:1.5px solid #dfd3cb;border-radius:6px;background:#fff;display:grid;place-items:center;font-size:10px;flex-shrink:0}.done .check{background:#a5d9c2;border-color:#a5d9c2;color:white}
+.right-panel{right:20px;top:88px;width:248px;padding:16px}.right-panel h2{font:900 17px Nunito,sans-serif;margin:4px 0 10px}.action-list{display:grid;gap:8px}.action{width:100%;display:flex;align-items:center;text-align:left;gap:10px;padding:9px 10px;border-radius:15px;background:#fff;border:1px solid #f0e7e0;transition:transform .18s,box-shadow .18s,background .18s}.action:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 5px 12px #74615c18;background:#fffaf7}.action:disabled{opacity:.48;cursor:default}.action-icon{width:35px;height:35px;border-radius:12px;background:#fff0e8;display:grid;place-items:center;font-size:18px;flex-shrink:0}.action:nth-child(2) .action-icon{background:#e8f4eb}.action:nth-child(3) .action-icon{background:#fff4d7}.action:nth-child(4) .action-icon{background:#f0eafa}.action:nth-child(5) .action-icon{background:#e7f2f4}.action-copy{min-width:0;flex:1}.action-title{font-size:11px;font-weight:900;display:block}.action-desc{font-size:9px;color:#9a8b8b;margin-top:2px;display:block;white-space:nowrap}.key{font-size:9px;font-weight:900;color:#b5a6a4;background:#f7f1ed;padding:4px 6px;border-radius:6px}.action-footer{font-size:9px;color:#a09192;text-align:center;margin-top:9px}
+.bottom-hint{position:absolute;z-index:3;bottom:20px;left:50%;transform:translateX(-50%);background:#fffaf2e8;border-radius:30px;padding:9px 16px;box-shadow:0 5px 20px #675a4d17;font-size:11px;font-weight:700;white-space:nowrap;color:#81717b}.bottom-hint b{color:#e8877c}.toast{position:absolute;z-index:8;top:80px;left:50%;transform:translate(-50%,-12px);opacity:0;pointer-events:none;background:#554755;color:#fff;padding:11px 17px;border-radius:14px;box-shadow:0 7px 22px #4234473b;font-size:12px;font-weight:800;transition:.3s}.toast.show{opacity:1;transform:translate(-50%,0)}.complete{position:absolute;inset:0;z-index:10;display:none;place-items:center;background:#443b4a75;backdrop-filter:blur(4px)}.complete.show{display:grid}.complete-card{width:min(390px,calc(100% - 32px));padding:30px;background:var(--cream);border-radius:28px;text-align:center;box-shadow:0 20px 70px #443b4a55;animation:pop .45s cubic-bezier(.2,1.6,.4,1)}.complete-card .big{font-size:58px}.complete-card h2{font:900 27px Nunito,sans-serif;margin:4px 0}.complete-card p{color:#867881;line-height:1.55;font-size:13px}.restart{margin-top:9px;padding:12px 21px;border-radius:14px;background:#f28d81;color:white;font-weight:900;box-shadow:0 5px 12px #e9857937}@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}.tag{position:absolute;z-index:2;pointer-events:none;transform:translate(-50%,-50%);padding:5px 9px;border-radius:10px;background:#fffaf2e8;font-size:10px;font-weight:900;box-shadow:0 3px 9px #54444920;white-space:nowrap}.tag.hidden{display:none}
+@media(max-width:900px){.left-panel{top:auto;bottom:76px;left:12px;width:205px;padding:13px}.left-panel .intro{display:none}.right-panel{top:auto;bottom:76px;right:12px;width:205px;padding:13px}.panel h1{font-size:18px}.action{padding:7px}.action-icon{width:31px;height:31px}.quest{margin-top:10px;padding-top:9px}.quest-list{gap:4px}.quest-list li{font-size:10px}.bottom-hint{bottom:15px;font-size:10px}.topbar{top:12px;left:12px;right:12px}.brand-name{font-size:17px}.brand-icon{width:40px;height:40px}}
+@media(max-width:520px){.left-panel{width:calc(50% - 18px);left:10px;bottom:66px}.right-panel{width:calc(50% - 18px);right:10px;bottom:66px}.left-panel h1{font-size:16px}.right-panel h2{font-size:15px}.action-title{font-size:10px}.action-desc{font-size:8px}.action{gap:7px}.action-icon{width:27px;height:27px;font-size:15px;border-radius:9px}.key{display:none}.quest-list li{font-size:9px}.need{margin:8px 0}.need-head{font-size:10px}.bar{height:6px}.brand-sub{display:none}.day-pill{font-size:10px;padding:9px 10px}.bottom-hint{max-width:90%;overflow:hidden;text-overflow:ellipsis}}
+</style>
+</head>
+<body>
+<div id="game">
+  <div id="scene"></div>
+  <header class="topbar"><div class="brand"><div class="brand-icon">🏡</div><div><div class="brand-name">Little Home, Big Love</div><div class="brand-sub">A cozy day together</div></div></div><div class="topright"><div class="day-pill">☀️ DAY 1 <span id="clock">8:00 AM</span></div><button class="sound-btn" id="sound" aria-label="Toggle sound">♫</button></div></header>
+  <section class="panel left-panel"><div class="eyebrow">A lovely little day</div><h1>Home sweet home</h1><p class="intro">A few little jobs will make everyone feel cozy. You’ve got this! 💛</p>
+    <div class="need"><div class="need-head"><span class="need-name">🍼 Baby's tummy</span><span class="need-val" id="hungerText">Needs a nibble</span></div><div class="bar"><div class="bar-fill" id="hungerBar" style="width:37%"></div></div></div>
+    <div class="need"><div class="need-head"><span class="need-name">🫧 Fresh & clean</span><span class="need-val" id="cleanText">A little messy</span></div><div class="bar"><div class="bar-fill mint" id="cleanBar" style="width:48%"></div></div></div>
+    <div class="need"><div class="need-head"><span class="need-name">💞 Baby's smiles</span><span class="need-val" id="happyText">Wants a cuddle</span></div><div class="bar"><div class="bar-fill lilac" id="happyBar" style="width:56%"></div></div></div>
+    <div class="quest"><div class="quest-title"><span>Today's little list</span><span class="quest-count" id="questCount">0 / 5</span></div><ul class="quest-list" id="questList"></ul></div>
+  </section>
+  <section class="panel right-panel"><div class="eyebrow">What shall we do?</div><h2>Pick a little task</h2><div class="action-list" id="actions"></div><div class="action-footer">You can also press <b>1–5</b> on your keyboard</div></section>
+  <div class="bottom-hint">✨ Click a task to help out — <b>every little thing matters</b></div>
+  <div class="toast" id="toast"></div>
+  <div class="complete" id="complete"><div class="complete-card"><div class="big">🏆🌷</div><h2>Home is full of love!</h2><p>You cooked, cleaned, and cared for your little one. All the tiny things made a beautiful day. You’re a wonderful caregiver! 💛</p><button class="restart" id="restart">Play another cozy day ↻</button></div></div>
+</div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
+const sceneHost=document.querySelector('#scene');
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0xc9e7e8); scene.fog=new THREE.Fog(0xc9e7e8,24,45);
+const camera=new THREE.OrthographicCamera(-12,12,8,-8,.1,100); camera.position.set(13,15,19); camera.lookAt(0,1.1,0);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.16; sceneHost.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xfff8eb,0x899e9b,2.1)); const sun=new THREE.DirectionalLight(0xffe6c6,3.0);sun.position.set(-5,12,7);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-13;sun.shadow.camera.right=13;sun.shadow.camera.top=13;sun.shadow.camera.bottom=-13;sun.shadow.bias=-.0002;scene.add(sun);
+const mat=(color,rough=.8)=>new THREE.MeshStandardMaterial({color,roughness:rough});
+const M={cream:mat('#fff2dc'),wall:mat('#fff6e9'),pink:mat('#f3b4a5'),coral:mat('#ef927f'),mint:mat('#9fcfba'),sage:mat('#75a892'),wood:mat('#be8b67'),wood2:mat('#d7aa83'),darkwood:mat('#8d665a'),blue:mat('#9dcbd2'),lilac:mat('#c3aad9'),yellow:mat('#f4ce79'),white:mat('#fffaf1'),skin:mat('#edb894'),hair:mat('#765248'),green:mat('#7ca98c'),red:mat('#ee8b81'),gray:mat('#c3c4bd'),floor:mat('#edd9c4'),rug:mat('#f3c9b8'),shadow:mat('#77655b'),black:mat('#4b464c')};
+function box(parent,x,y,z,w,h,d,material,rx=0,rz=0){const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);mesh.position.set(x,y,z);mesh.rotation.x=rx;mesh.rotation.z=rz;mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh}
+function sphere(parent,x,y,z,sx,sy,sz,material){const mesh=new THREE.Mesh(new THREE.SphereGeometry(1,20,16),material);mesh.position.set(x,y,z);mesh.scale.set(sx,sy,sz);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh}
+function cyl(parent,x,y,z,r1,r2,h,material,segments=16){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,segments),material);mesh.position.set(x,y,z);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh}
+function group(parent,x=0,y=0,z=0){const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);return g}
+function roundedFloor(){box(scene,0,-.25,0,17,.5,11,M.wood);box(scene,0,.015,0,16.75,.12,10.75,M.floor);for(let z=-4.5;z<=4.5;z+=1){for(let x=-7.5;x<=7.5;x+=1){box(scene,x,.078,z,.96,.035,.96,((Math.round(x+z)%2)===0)?mat('#f4e3d1'):mat('#efddca'));}}}
+roundedFloor();
+// Open dollhouse walls, striped blush wallpaper and mint trim.
+box(scene,0,2.4,-5.18,17,4.8,.24,M.wall);box(scene,-8.38,2.4,0,.24,4.8,10.5,M.wall);
+box(scene,0,.23,-5,17,.24,.34,M.mint);box(scene,-8.2,.23,0,.32,.24,10.2,M.mint);
+for(let x=-7.7;x<=7.7;x+=1.35)box(scene,x,2.35,-5.045,.025,4.2,.018,mat('#f6e8df'));
+// wall art
+function frame(x,y,z,w,h,color){box(scene,x,y,z,w,h,.12,M.wood2);box(scene,x,y,z+.08,w-.12,h-.12,.035,mat(color));sphere(scene,x,y,z+.115,.18,.18,.025,M.yellow);}
+frame(-5.3,3.3,-4.98,1.45,1.3,'#bcded0');frame(.6,3.4,-4.98,1.35,1.05,'#f4c3b4');frame(5.4,3.2,-4.98,1.4,1.2,'#d7c5e6');
+// sunlit window on back wall
+box(scene,-2.5,2.8,-4.95,2.25,2.15,.12,M.wood2);box(scene,-2.5,2.8,-4.86,1.95,1.85,.05,mat('#b9e0e8'));box(scene,-2.5,2.8,-4.8,.1,1.9,.05,M.white);box(scene,-2.5,2.8,-4.8,2,.1,.05,M.white);
+// Kitchen area left: cabinets, counter, stove, sink, fridge.
+box(scene,-5.3,.57,-3.3,4.3,1.05,1.2,M.mint);box(scene,-5.3,1.15,-3.3,4.55,.18,1.42,M.white);
+for(let x=-6.75;x<=-3.85;x+=1.42){box(scene,x,.58,-2.67,1.15,.72,.07,M.sage);box(scene,x,.58,-2.62,.08,.13,.06,M.yellow);}
+// cooktop
+box(scene,-5.9,1.27,-3.25,1.05,.08,.85,M.gray);for(const x of [-6.2,-5.62])for(const z of [-3.48,-3.02])cyl(scene,x,1.34,z,.19,.19,.04,M.black,20);
+box(scene,-5.9,.8,-3.89,.9,.52,.08,M.white);box(scene,-5.9,.8,-3.82,.46,.25,.04,M.gray);for(let x=-6.15;x< -5.55;x+=.3)cyl(scene,x,1.06,-3.82,.045,.045,.04,M.black,12);
+// sink and faucet
+box(scene,-4.55,1.28,-3.35,.8,.08,.7,M.gray);box(scene,-4.55,1.33,-3.35,.52,.025,.42,M.blue);cyl(scene,-4.55,1.56,-3.62,.045,.045,.42,M.gray);box(scene,-4.55,1.76,-3.43,.045,.28,.05,M.gray);
+// fridge
+box(scene,-7.3,1.4,-1.7,1.15,2.55,1.35,M.white);box(scene,-6.69,1.25,-1.7,.05,2.1,.04,M.gray);box(scene,-7.29,1.8,-1.0,1.05,.05,.04,M.gray);
+// fridge magnets
+sphere(scene,-7.6,2.05,-.97,.1,.1,.05,M.coral);sphere(scene,-7.13,2.3,-.97,.09,.09,.05,M.yellow);
+// plant near kitchen
+cyl(scene,-7.1,.36,-4.5,.32,.24,.48,M.coral);for(const [x,y,z,s] of [[-7.3,.9,-4.5,.3],[-6.9,.95,-4.5,.29],[-7.15,1.12,-4.5,.27]])sphere(scene,x,y,z,s,.42,.13,M.sage);
+// Nursery on right: crib
+box(scene,4.6,.62,-2.1,3.15,.22,2.15,M.wood2);box(scene,4.6,.83,-2.1,2.88,.18,1.92,M.white);
+box(scene,4.6,1.13,-3.05,3.28,.72,.16,M.wood2);box(scene,4.6,1.13,-1.15,3.28,.72,.16,M.wood2);
+for(let x=3.25;x<=5.95;x+=.38){cyl(scene,x,1.35,-3.05,.045,.045,.66,M.white,10);cyl(scene,x,1.35,-1.15,.045,.045,.66,M.white,10)}
+// crib bunting
+for(let i=0;i<7;i++){const x=3.25+i*.45;const flag=box(scene,x,1.75,-3.08,.29,.26,.04,[M.coral,M.yellow,M.mint,M.lilac][i%4]);flag.rotation.z=Math.PI;}
+// baby, blanket, face
+const baby=group(scene,4.55,1.0,-2.1);sphere(baby,0,.36,0,.52,.38,.72,M.lilac);sphere(baby,-.02,.66,.23,.37,.38,.37,M.skin);sphere(baby,.02,.94,.18,.28,.14,.28,M.hair);
+sphere(baby,-.15,.68,.55,.045,.055,.035,M.black);sphere(baby,.13,.68,.55,.045,.055,.035,M.black);sphere(baby,-.02,.56,.58,.07,.035,.025,M.coral);
+sphere(baby,-.53,.32,.1,.24,.14,.24,M.skin);sphere(baby,.5,.31,.05,.23,.14,.23,M.skin);sphere(baby,-.18,.1,-.38,.22,.14,.33,M.skin);sphere(baby,.25,.1,-.38,.22,.14,.33,M.skin);
+// mobile above crib
+cyl(scene,4.6,2.44,-2.1,.035,.035,.75,M.wood2);box(scene,4.6,2.76,-2.1,1.3,.05,.05,M.wood2);for(let i=0;i<3;i++){const x=4.15+i*.45;cyl(scene,x,2.48,-2.1,.025,.025,.48,M.white);sphere(scene,x,2.22,-2.1,.12,.17,.12,[M.yellow,M.coral,M.mint][i]);}
+// changing table and drawers
+box(scene,7.05,.55,-3.4,1.55,1.03,1.35,M.wood2);box(scene,7.05,1.1,-3.4,1.72,.16,1.52,M.white);box(scene,7.05,1.23,-3.4,.95,.1,.55,M.lilac);for(let y=.4;y<.9;y+=.38){box(scene,7.05,y,-2.71,1.3,.26,.06,M.pink);sphere(scene,7.05,y,-2.64,.07,.07,.04,M.yellow);}
+// Living room rug, sofa, table, toys and spill.
+box(scene,.35,.15,2.6,6.6,.08,4.0,M.rug);box(scene,.35,.21,2.6,5.9,.04,3.3,mat('#f7d8c8'));
+// scalloped pattern accents
+for(let x=-2.2;x<=2.8;x+=.65){sphere(scene,x,.26,.98,.12,.025,.12,M.white);sphere(scene,x,.26,4.22,.12,.025,.12,M.white)}
+// sofa facing front
+box(scene,2.0,.62,4.0,4.6,.82,1.0,M.coral);box(scene,2,.99,4.42,4.5,.75,.3,M.pink);
+for(let x=.35;x<=3.65;x+=1.1)box(scene,x,.83,3.65,1.02,.68,.88,M.pink);
+for(let x=.25;x<=3.75;x+=3.5)box(scene,x,.26,4.0,.18,.48,.2,M.wood);
+// cushions
+box(scene,.72,1.15,3.83,.72,.52,.3,M.yellow,.15);box(scene,2.75,1.15,3.83,.75,.5,.3,M.mint,-.12);
+// coffee table
+box(scene,-1.1,.55,2.8,2.15,.16,1.4,M.wood2);for(const [x,z] of [[-1.9,2.3],[-.3,2.3],[-1.9,3.3],[-.3,3.3]])box(scene,x,.28,z,.12,.52,.12,M.wood);
+// books and tea cup
+box(scene,-1.5,.69,2.75,.65,.1,.42,M.lilac);box(scene,-1.48,.78,2.75,.6,.1,.38,M.coral);cyl(scene,-.75,.83,2.65,.16,.13,.25,M.white);cyl(scene,-.75,.97,2.65,.12,.12,.03,M.wood2);
+// scattered toys and blocks
+const toys=[];for(const [x,z,c] of [[-2.7,1.8,M.yellow],[-3.15,2.35,M.coral],[-2.25,3.65,M.mint],[-3.2,3.3,M.lilac]]){const t=box(scene,x,.34,z,.36,.38,.36,c);t.rotation.y=Math.random()*.7;toys.push(t)}
+// spill puddle beside table
+const spill=sphere(scene,-.65,.17,1.56,.62,.045,.43,mat('#9ed7df',.3));spill.scale.set(.7,.05,.45);
+// cozy houseplant & floor lamp
+cyl(scene,6.65,.38,1.5,.4,.32,.7,M.yellow);for(const [x,y,z] of [[6.4,1.1,1.5,.32],[6.8,1.25,1.5,.32],[6.55,1.5,1.48,.28],[6.92,1.05,1.5,.25]])sphere(scene,x,y,z,.22,.48,.13,M.sage);
+cyl(scene,-4,.95,.1,.055,.055,1.8,M.wood2);sphere(scene,-4,1.95,.1,.48,.39,.45,M.yellow);
+// Food on counter
+const plate=cyl(scene,-4.7,1.34,-2.92,.43,.43,.07,M.white,24);const food1=sphere(scene,-4.72,1.43,-2.91,.24,.1,.19,M.yellow);const food2=sphere(scene,-4.42,1.43,-2.92,.16,.09,.16,M.coral);
+// Character caregiver standing, simple cheerful figure
+const avatar=group(scene,-1.6,0,-.35);cyl(avatar,0,.91,0,.31,.39,.92,M.green,20);sphere(avatar,0,1.7,0,.39,.44,.38,M.skin);sphere(avatar,0,2.02,-.04,.42,.2,.39,M.hair);sphere(avatar,-.15,1.72,.35,.045,.055,.035,M.black);sphere(avatar,.15,1.72,.35,.045,.055,.035,M.black);sphere(avatar,0,1.57,.37,.07,.035,.025,M.coral);
+sphere(avatar,-.42,1.2,.02,.16,.34,.17,M.skin);sphere(avatar,.42,1.2,.02,.16,.34,.17,M.skin);cyl(avatar,-.16,.27,0,.12,.14,.48,M.pink);cyl(avatar,.16,.27,0,.12,.14,.48,M.pink);
+// Small window daisies and floating ambient hearts
+for(let i=0;i<5;i++){const p=sphere(scene,-2.5+(Math.random()-.5)*1.5,.2,-4.25+(Math.random()-.5)*.8,.045,.045,.045,M.yellow);}
+// Rugs shadow floor and camera setup
+const ground=box(scene,0,-.62,0,200,.15,200,mat('#d6e8dc'));ground.receiveShadow=true;
+const targetPositions={cook:new THREE.Vector3(-5.6,0,-2.1),toys:new THREE.Vector3(-2.8,0,2.8),spill:new THREE.Vector3(-.6,0,1.6),feed:new THREE.Vector3(4.5,0,-1.7),diaper:new THREE.Vector3(6.7,0,-2.1),cuddle:new THREE.Vector3(4.5,0,-1.7)};
+
+const tasks=[
+ {id:'cook',icon:'🍳',title:'Make a yummy breakfast',desc:'Whip up pancakes on the stove',key:'1',done:false},
+ {id:'toys',icon:'🧸',title:'Tidy the playroom',desc:'Put those toys back in place',key:'2',done:false},
+ {id:'spill',icon:'🫧',title:'Wipe up the little spill',desc:'Make the floor sparkle again',key:'3',done:false},
+ {id:'feed',icon:'🍼',title:'Feed your little one',desc:'A bottle and a happy tummy',key:'4',done:false},
+ {id:'diaper',icon:'🧷',title:'Freshen up baby',desc:'A clean diaper feels so good',key:'5',done:false}
+];
+let needs={hunger:37,clean:48,happy:56},minutes=0,taskCount=0,busy=false,complete=false;
+const list=document.querySelector('#questList'),actionRoot=document.querySelector('#actions');
+function renderUI(){list.innerHTML=tasks.map(t=>`<li class="${t.done?'done':''}"><span class="check">${t.done?'✓':''}</span>${t.title}</li>`).join('');document.querySelector('#questCount').textContent=`${taskCount} / ${tasks.length}`;actionRoot.innerHTML=tasks.map((t,i)=>`<button class="action" data-id="${t.id}" ${t.done||busy?'disabled':''}><span class="action-icon">${t.icon}</span><span class="action-copy"><span class="action-title">${t.title}</span><span class="action-desc">${t.done?'All done — lovely!':t.desc}</span></span><span class="key">${t.key}</span></button>`).join('');actionRoot.querySelectorAll('button').forEach(b=>b.onclick=()=>doTask(b.dataset.id));
+ document.querySelector('#hungerBar').style.width=needs.hunger+'%';document.querySelector('#cleanBar').style.width=needs.clean+'%';document.querySelector('#happyBar').style.width=needs.happy+'%';document.querySelector('#hungerText').textContent=needs.hunger>75?'Very full!':needs.hunger>48?'All smiles':'Needs a nibble';document.querySelector('#cleanText').textContent=needs.clean>75?'Sparkling!':needs.clean>48?'Looking better':'A little messy';document.querySelector('#happyText').textContent=needs.happy>75?'So happy!':needs.happy>48?'Feeling loved':'Wants a cuddle';document.querySelector('#clock').textContent=timeText();}
+function timeText(){const total=8*60+minutes;return `${Math.floor(total/60)%12||12}:${String(total%60).padStart(2,'0')} ${total>=720?'PM':'AM'}`}
+function say(text){const el=document.querySelector('#toast');el.textContent=text;el.classList.add('show');clearTimeout(say.timer);say.timer=setTimeout(()=>el.classList.remove('show'),2100)}
+function doTask(id){if(busy||complete)return;const t=tasks.find(t=>t.id===id);if(!t||t.done)return;busy=true;renderUI();const dest=targetPositions[id];avatar.userData.dest=dest;avatar.userData.task=id;avatar.userData.progress=0;setTimeout(()=>finishTask(t),1200)}
+function finishTask(t){t.done=true;taskCount++;minutes+=18;needs.hunger=Math.max(15,needs.hunger-4);needs.clean=Math.max(18,needs.clean-2);needs.happy=Math.max(20,needs.happy-3);
+ if(t.id==='cook'){needs.hunger=100;food1.material=M.coral;food2.material=M.yellow;say('🥞 Breakfast is ready! Smells so good!')}
+ if(t.id==='toys'){needs.clean=Math.min(100,needs.clean+27);toys.forEach((o,i)=>{o.position.set(1.7+(i%2)*.24,.33,1.45+Math.floor(i/2)*.22);o.rotation.set(0,i*.7,0)});say('🧸 Toys are tucked away. Nice work!')}
+ if(t.id==='spill'){needs.clean=Math.min(100,needs.clean+28);spill.visible=false;say('✨ All clean — you’ve got magic hands!')}
+ if(t.id==='feed'){needs.hunger=100;needs.happy=Math.min(100,needs.happy+13);baby.userData.fed=true;say('🍼 A happy, full tummy!')}
+ if(t.id==='diaper'){needs.clean=Math.min(100,needs.clean+34);needs.happy=Math.min(100,needs.happy+9);say('🌼 Fresh and comfy. Baby says thank you!')}
+ minutes+=12;busy=false;avatar.userData.task=null;renderUI();if(taskCount===tasks.length){complete=true;setTimeout(()=>document.querySelector('#complete').classList.add('show'),700)}}
+renderUI();document.addEventListener('keydown',e=>{if(e.key>='1'&&e.key<='5')doTask(tasks[Number(e.key)-1].id)});document.querySelector('#restart').onclick=()=>location.reload();
+
+// Soft ambient sound with Web Audio, only starts after the player asks.
+let audioOn=false,ctx,osc,gain;document.querySelector('#sound').onclick=()=>{audioOn=!audioOn;const b=document.querySelector('#sound');b.textContent=audioOn?'♫':'♪';b.style.color=audioOn?'#e8877c':'';if(audioOn){ctx??=new AudioContext();if(!osc){osc=ctx.createOscillator();gain=ctx.createGain();osc.type='sine';osc.frequency.value=261.63;gain.gain.value=.012;osc.connect(gain);gain.connect(ctx.destination);osc.start()}ctx.resume()}else if(ctx)ctx.suspend()};
+
+const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let hoverObj=null;const interactables=[{mesh:plate,id:'cook'},{mesh:toys[0],id:'toys'},{mesh:spill,id:'spill'},{mesh:baby.children[0],id:'feed'}];
+renderer.domElement.addEventListener('pointermove',e=>{pointer.x=e.clientX/innerWidth*2-1;pointer.y=-(e.clientY/innerHeight)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(interactables.map(x=>x.mesh),false);renderer.domElement.style.cursor=hits.length?'pointer':'default'});
+renderer.domElement.addEventListener('click',e=>{pointer.x=e.clientX/innerWidth*2-1;pointer.y=-(e.clientY/innerHeight)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(interactables.map(x=>x.mesh),false);if(hits.length){const target=interactables.find(x=>x.mesh===hits[0].object);if(target)doTask(target.id)}});
+function resize(){const w=sceneHost.clientWidth,h=sceneHost.clientHeight,aspect=w/h;const view=9.4;camera.left=-view*aspect;camera.right=view*aspect;camera.top=view;camera.bottom=-view;camera.updateProjectionMatrix();renderer.setSize(w,h,false)}window.addEventListener('resize',resize);resize();
+const clock=new THREE.Clock();function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();if(avatar.userData.dest){const d=avatar.userData.dest;const dx=d.x-avatar.position.x,dz=d.z-avatar.position.z;const len=Math.hypot(dx,dz);if(len>.08){avatar.position.x+=dx/len*.075;avatar.position.z+=dz/len*.075;avatar.rotation.y=Math.atan2(dx,dz);avatar.position.y=Math.abs(Math.sin(t*12))*.055}else{avatar.userData.dest=null;avatar.position.y=0}}
+baby.position.y=1+Math.sin(t*2.7)*.035+(baby.userData.fed?.02:0);baby.rotation.z=Math.sin(t*1.6)*.025;
+if(!complete){renderer.render(scene,camera)}else renderer.render(scene,camera)}animate();
+</script>
+</body>
+</html>
